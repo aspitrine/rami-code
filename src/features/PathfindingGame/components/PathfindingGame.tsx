@@ -40,9 +40,9 @@ export function PathfindingGame() {
 	);
 
 	return (
-		<div className="w-full min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 flex flex-col">
+		<div className="w-full min-h-screen bg-linear-to-br from-slate-900 via-slate-800 to-slate-900 flex flex-col">
 			{/* Header */}
-			<div className="p-4 bg-slate-800/80 backdrop-blur-sm border-b border-slate-700 sticky top-0 z-20">
+			<div className="p-4 backdrop-blur-sm border-b border-slate-700 sticky top-0 z-20">
 				<div className="max-w-7xl mx-auto">
 					<div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
 						<div>
@@ -109,10 +109,6 @@ export function PathfindingGame() {
 							{/* Legend */}
 							<div className="mt-4 flex flex-wrap gap-3 justify-center text-sm">
 								<div className="flex items-center gap-2">
-									<span className="text-xl">🚀</span>
-									<span className="text-gray-300">Départ</span>
-								</div>
-								<div className="flex items-center gap-2">
 									<span className="text-xl">🏁</span>
 									<span className="text-gray-300">Arrivée</span>
 								</div>
@@ -144,7 +140,7 @@ export function PathfindingGame() {
 								type="button"
 								onClick={pathfindingActions.startGame}
 								disabled={isPlaying || instructions.length === 0}
-								className="w-full h-14 text-lg font-bold gap-2 bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800"
+								className="w-full h-14 text-lg font-bold gap-2 bg-linear-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800"
 							>
 								<Play size={24} />
 								{isPlaying ? "En cours..." : "Démarrer"}
@@ -218,7 +214,7 @@ export function PathfindingGame() {
 										pathfindingActions.closeModal();
 										pathfindingActions.newLevel();
 									}}
-									className="flex-1 bg-gradient-to-r from-purple-600 to-purple-700 hover:from-purple-700 hover:to-purple-800"
+									className="flex-1 bg-linear-to-r from-purple-600 to-purple-700 hover:from-purple-700 hover:to-purple-800"
 								>
 									Nouveau niveau
 								</Button>

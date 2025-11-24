@@ -21,7 +21,7 @@ export function Player({ position, tileSize, isPlaying }: PlayerProps) {
 			style={{
 				left: `${displayPosition.x * (tileSize + 2) + tileSize / 2}px`,
 				top: `${displayPosition.y * (tileSize + 2) + tileSize / 2}px`,
-				transform: "translate(-50%, -50%)",
+				transform: "translate(-25%, -50%)",
 				transition: isPlaying
 					? "left 0.4s cubic-bezier(0.4, 0, 0.2, 1), top 0.4s cubic-bezier(0.4, 0, 0.2, 1)"
 					: "none",

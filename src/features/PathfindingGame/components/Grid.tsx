@@ -64,8 +64,6 @@ export function Grid({
 		switch (type) {
 			case "end":
 				return "🏁";
-			case "start":
-				return "🚀";
 			case "obstacle":
 				return "🧱";
 			default:
@@ -91,7 +89,10 @@ export function Grid({
 							const type = getTileType(x, y);
 							return (
 								<div
-									key={`${x}-${y}`}
+									key={`${x}-${
+										// biome-ignore lint/suspicious/noArrayIndexKey: It's ok
+										y
+									}`}
 									className={getTileClasses(type)}
 									style={{
 										width: `${tileSize}px`,

@@ -92,7 +92,7 @@ export function RamiGame() {
 
 	return (
 		<div className="w-full h-screen bg-slate-900 flex flex-col">
-			<div className="p-4 bg-slate-800 text-white z-10">
+			<div className="p-4 text-white z-10">
 				<div className="flex justify-between items-center mb-4">
 					<h1 className="text-2xl font-bold">Rami Code</h1>
 
