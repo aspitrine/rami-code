@@ -8,6 +8,7 @@ interface GameState {
 	targetBin: number | null;
 	showResultModal: boolean;
 	showHelp: boolean;
+	showPathPreview: boolean;
 }
 
 export const gameStore = new Store<GameState>({
@@ -17,6 +18,7 @@ export const gameStore = new Store<GameState>({
 	targetBin: null,
 	showResultModal: false,
 	showHelp: false,
+	showPathPreview: false,
 });
 
 // Helper to determine level from node index
@@ -115,10 +117,52 @@ export const gameActions = {
 	toggleHelp: () => {
 		gameStore.setState((prev) => ({ ...prev, showHelp: !prev.showHelp }));
 	},
+
+	togglePathPreview: () => {
+		gameStore.setState((prev) => ({
+			...prev,
+			showPathPreview: !prev.showPathPreview,
+		}));
+	},
 };
 
 // Derived state: node states for rendering
 export function getNodeStates(): boolean[] {
 	const { rowStates } = gameStore.state;
 	return new Array(15).fill(false).map((_, i) => rowStates[getLevel(i)]);
+}
+
+// Calculate preview path based on current row states
+export function calculatePreviewPath(): [number, number, number][] {
+	const { rowStates } = gameStore.state;
+	const points: [number, number, number][] = [];
+
+	// Get root position first
+	const rootPos = getNodePosition(0);
+
+	// Start from root
+	points.push([rootPos[0], rootPos[1], 0]);
+
+	let currentIndex = 0;
+
+	for (let level = 0; level < 4; level++) {
+		const isRight = rowStates[level];
+
+		// Determine next index
+		const nextIndex = isRight ? 2 * currentIndex + 2 : 2 * currentIndex + 1;
+
+		if (level < 3) {
+			const nextPos = getNodePosition(nextIndex);
+			points.push([nextPos[0], nextPos[1], 0]);
+			currentIndex = nextIndex;
+		} else {
+			// Final level to bin
+			const relativeIndex = currentIndex - 7;
+			const binIndex = isRight ? 2 * relativeIndex + 1 : 2 * relativeIndex;
+			const binPos = getBinPosition(binIndex);
+			points.push(binPos);
+		}
+	}
+
+	return points;
 }

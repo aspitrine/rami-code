@@ -28,14 +28,14 @@ export function Marble({ pathPoints, onFinish }: MarbleProps) {
 
 			// Detect if we're in a bounce phase (moving upward after hitting a node)
 			// Slow down significantly during bounces, accelerate slowly otherwise
-			let targetSpeed = 0.3; // Base speed
+			let targetSpeed = 0.5; // Base speed
 
 			// If Y position is high (bouncing), slow down dramatically
 			if (y > -0.5) {
 				// Very slow during bounces - this makes the bounces visible and realistic
-				targetSpeed = 0.15;
+				targetSpeed = 0.3;
 			} else if (y < -2) {
-				targetSpeed = 0.5; // Faster when falling from height
+				targetSpeed = 0.8; // Faster when falling from height
 			}
 
 			// Smooth velocity transition with stronger damping for smoother transitions

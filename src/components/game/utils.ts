@@ -16,12 +16,12 @@ export function getNodePosition(index: number): [number, number, number] {
 	// At level 2, spacing is 4 * BIN_SPACING
 	// At level L, spacing is 2^(3-L) * 2 * BIN_SPACING = 2^(4-L) * BIN_SPACING
 
-	const spacingAtLevel = Math.pow(2, 4 - level) * BIN_SPACING;
+	const spacingAtLevel = 2 ** (4 - level) * BIN_SPACING;
 
 	// Calculate index within the level (0 to nodesInLevel - 1)
-	const firstIndexInLevel = Math.pow(2, level) - 1;
+	const firstIndexInLevel = 2 ** level - 1;
 	const indexInLevel = index - firstIndexInLevel;
-	const nodesInLevel = Math.pow(2, level);
+	const nodesInLevel = 2 ** level;
 
 	const x = (indexInLevel - (nodesInLevel - 1) / 2) * spacingAtLevel;
 	const y = (LEVELS - 1 - level) * VERTICAL_SPACING;

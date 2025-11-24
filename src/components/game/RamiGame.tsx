@@ -1,13 +1,19 @@
 import { OrbitControls, PerspectiveCamera } from "@react-three/drei";
 import { Canvas, useThree } from "@react-three/fiber";
 import { useStore } from "@tanstack/react-store";
-import { HelpCircle } from "lucide-react";
-import { useEffect } from "react";
+import { Eye, HelpCircle } from "lucide-react";
+import { useEffect, useMemo } from "react";
 import * as THREE from "three";
-import { gameActions, gameStore, getNodeStates } from "../../lib/game-store";
+import {
+	calculatePreviewPath,
+	gameActions,
+	gameStore,
+	getNodeStates,
+} from "../../lib/game-store";
 import { Button } from "../ui/button";
 import { Board } from "./Board";
 import { Marble } from "./Marble";
+import { PathPreview } from "./PathPreview";
 
 function ResponsiveCamera() {
 	const { camera, size } = useThree();
@@ -51,6 +57,16 @@ export function RamiGame() {
 	const targetBin = useStore(gameStore, (state) => state.targetBin);
 	const showResultModal = useStore(gameStore, (state) => state.showResultModal);
 	const showHelp = useStore(gameStore, (state) => state.showHelp);
+	const showPathPreview = useStore(gameStore, (state) => state.showPathPreview);
+
+	// Calculate preview path when needed
+	// biome-ignore lint/correctness/useExhaustiveDependencies: rowStates is needed for refresh previewPath
+	const previewPath = useMemo(() => {
+		if (showPathPreview && !isPlaying) {
+			return calculatePreviewPath();
+		}
+		return null;
+	}, [showPathPreview, isPlaying, rowStates]);
 
 	// Helper to determine level from node index
 	const getLevel = (index: number) => {
@@ -76,51 +92,10 @@ export function RamiGame() {
 
 	return (
 		<div className="w-full h-screen bg-slate-900 flex flex-col">
-			<div className="p-4 flex justify-between items-center bg-slate-800 text-white z-10">
-				<h1 className="text-2xl font-bold">Rami Code</h1>
+			<div className="p-4 bg-slate-800 text-white z-10">
+				<div className="flex justify-between items-center mb-4">
+					<h1 className="text-2xl font-bold">Rami Code</h1>
 
-				{/* Row Controls */}
-				<div className="flex flex-col gap-2">
-					<div className="flex gap-4 items-center bg-slate-700 p-2 rounded-lg">
-						<span className="text-sm font-semibold text-gray-300">Rows:</span>
-						{rowStates.map((isOn, index) => (
-							// biome-ignore lint/suspicious/noArrayIndexKey: it's ok here, it's a row number
-							<div key={index} className="flex flex-col items-center gap-1">
-								<button
-									type="button"
-									onClick={() => gameActions.toggleRow(index)}
-									disabled={isPlaying}
-									className={`w-8 h-8 rounded-full flex items-center justify-center font-bold transition-colors ${
-										isOn
-											? "bg-yellow-500 text-black"
-											: "bg-slate-600 text-white"
-									} ${isPlaying ? "opacity-50 cursor-not-allowed" : "hover:bg-yellow-400"}`}
-								>
-									{isOn ? "1" : "0"}
-								</button>
-								{showHelp && (
-									<span className="text-xs text-gray-400 whitespace-nowrap">
-										2^{3 - index} = {Math.pow(2, 3 - index)}
-									</span>
-								)}
-							</div>
-						))}
-						<button
-							type="button"
-							onClick={gameActions.toggleHelp}
-							className={`p-1.5 rounded-full transition-colors ${
-								showHelp
-									? "bg-blue-500 text-white"
-									: "bg-slate-600 text-gray-300 hover:bg-slate-500"
-							}`}
-							title="Afficher/Masquer l'aide"
-						>
-							<HelpCircle size={16} />
-						</button>
-					</div>
-				</div>
-
-				<div className="flex gap-4">
 					<Button
 						type="button"
 						onClick={gameActions.startGame}
@@ -128,6 +103,62 @@ export function RamiGame() {
 					>
 						{isPlaying ? "En cours" : "Commencer"}
 					</Button>
+				</div>
+
+				{/* Bottom row: Row Controls - wraps on mobile */}
+				<div className="flex flex-wrap gap-4 items-center justify-center">
+					<div className="flex flex-col gap-2">
+						<div className="flex gap-4 items-center bg-slate-700 p-2 rounded-lg">
+							<span className="text-sm font-semibold text-gray-300">Rows:</span>
+							{rowStates.map((isOn, index) => (
+								// biome-ignore lint/suspicious/noArrayIndexKey: it's ok here, it's a row number
+								<div key={index} className="flex flex-col items-center gap-1">
+									<button
+										type="button"
+										onClick={() => gameActions.toggleRow(index)}
+										disabled={isPlaying}
+										className={`w-8 h-8 rounded-full flex items-center justify-center font-bold transition-colors ${
+											isOn
+												? "bg-yellow-500 text-black"
+												: "bg-slate-600 text-white"
+										} ${isPlaying ? "opacity-50 cursor-not-allowed" : "hover:bg-yellow-400"}`}
+									>
+										{isOn ? "1" : "0"}
+									</button>
+									{showHelp && (
+										<span className="text-xs text-gray-400 whitespace-nowrap">
+											2^{3 - index} = {2 ** (3 - index)}
+										</span>
+									)}
+								</div>
+							))}
+							<button
+								type="button"
+								onClick={gameActions.toggleHelp}
+								className={`p-1.5 rounded-full transition-colors ${
+									showHelp
+										? "bg-blue-500 text-white"
+										: "bg-slate-600 text-gray-300 hover:bg-slate-500"
+								}`}
+								title="Afficher/Masquer l'aide"
+							>
+								<HelpCircle size={16} />
+							</button>
+							<button
+								type="button"
+								onClick={gameActions.togglePathPreview}
+								disabled={isPlaying}
+								className={`p-1.5 rounded-full transition-colors ${
+									showPathPreview
+										? "bg-cyan-500 text-white"
+										: "bg-slate-600 text-gray-300 hover:bg-slate-500"
+								} ${isPlaying ? "opacity-50 cursor-not-allowed" : ""}`}
+								title="Afficher/Masquer la prévisualisation du chemin"
+							>
+								<Eye size={16} />
+							</button>
+						</div>
+					</div>
 				</div>
 			</div>
 
@@ -148,6 +179,9 @@ export function RamiGame() {
 						onToggleNode={handleToggleNode}
 						hideLabels={showResultModal}
 					/>
+
+					{/* Path Preview */}
+					{previewPath && <PathPreview pathPoints={previewPath} />}
 
 					{isPlaying && pathPoints && (
 						<Marble
