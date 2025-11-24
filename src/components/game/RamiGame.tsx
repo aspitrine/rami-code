@@ -170,6 +170,11 @@ export function RamiGame() {
 						enablePan={true}
 						enableZoom={true}
 						enableRotate={false}
+						mouseButtons={{
+							LEFT: THREE.MOUSE.PAN,
+							MIDDLE: THREE.MOUSE.DOLLY,
+							RIGHT: THREE.MOUSE.PAN,
+						}}
 					/>
 
 					<ambientLight intensity={1} />
