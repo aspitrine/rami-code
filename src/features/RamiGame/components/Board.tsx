@@ -1,7 +1,7 @@
+import { getBinPosition, getNodePosition } from "../lib/utils";
 import { Bin } from "./Bin";
 import { Node } from "./Node";
 import { Track } from "./Track";
-import { getBinPosition, getNodePosition } from "./utils";
 
 interface BoardProps {
 	nodeStates: boolean[]; // Array of boolean states for each node

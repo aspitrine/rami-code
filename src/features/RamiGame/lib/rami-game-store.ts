@@ -1,5 +1,5 @@
 import { Store } from "@tanstack/store";
-import { getBinPosition, getNodePosition } from "../components/game/utils";
+import { getBinPosition, getNodePosition } from "./utils";
 
 interface GameState {
 	rowStates: boolean[];

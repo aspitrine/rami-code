@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { RamiGame } from "../components/game/RamiGame";
+import { RamiGame } from "../features/RamiGame/components/RamiGame.tsx";
 
 export const Route = createFileRoute("/")({ component: App });
 

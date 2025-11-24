@@ -4,13 +4,13 @@ import { useStore } from "@tanstack/react-store";
 import { Eye, HelpCircle } from "lucide-react";
 import { useEffect, useMemo } from "react";
 import * as THREE from "three";
+import { Button } from "@/components/ui/button";
 import {
 	calculatePreviewPath,
 	gameActions,
 	gameStore,
 	getNodeStates,
-} from "../../lib/game-store";
-import { Button } from "../ui/button";
+} from "../lib/rami-game-store";
 import { Board } from "./Board";
 import { Marble } from "./Marble";
 import { PathPreview } from "./PathPreview";
