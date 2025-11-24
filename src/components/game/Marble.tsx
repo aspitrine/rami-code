@@ -21,11 +21,26 @@ export function Marble({ pathPoints, onFinish }: MarbleProps) {
 		return new THREE.CatmullRomCurve3(vectors, false, "catmullrom", 0.5);
 	}, [pathPoints]);
 
-	useFrame((state, delta) => {
+	useFrame((_, delta) => {
 		if (meshRef.current && curve) {
-			// Acceleration logic
-			const acceleration = 0.5; // Adjust this value to change acceleration rate
-			const newVelocity = velocity + acceleration * delta;
+			const currentPoint = curve.getPointAt(progress);
+			const y = currentPoint.y;
+
+			// Detect if we're in a bounce phase (moving upward after hitting a node)
+			// Slow down significantly during bounces, accelerate slowly otherwise
+			let targetSpeed = 0.3; // Base speed
+
+			// If Y position is high (bouncing), slow down dramatically
+			if (y > -0.5) {
+				// Very slow during bounces - this makes the bounces visible and realistic
+				targetSpeed = 0.15;
+			} else if (y < -2) {
+				targetSpeed = 0.5; // Faster when falling from height
+			}
+
+			// Smooth velocity transition with stronger damping for smoother transitions
+			const damping = 0.85; // Lower damping = smoother transitions
+			const newVelocity = velocity * damping + targetSpeed * (1 - damping);
 			const newProgress = Math.min(progress + newVelocity * delta, 1);
 
 			setVelocity(newVelocity);
@@ -65,14 +80,14 @@ export function Marble({ pathPoints, onFinish }: MarbleProps) {
 	return (
 		<group>
 			<mesh ref={meshRef} position={pathPoints[0]}>
-				<sphereGeometry args={[0.3, 32, 32]} />
-				<meshStandardMaterial color="#ef4444" metalness={0.6} roughness={0.2} />
+				<sphereGeometry args={[0.5, 32, 32]} />
+				<meshStandardMaterial color="#FF0000" />
 			</mesh>
 			{trace.length > 1 && (
 				<Line
 					points={trace}
-					color="#FFD700" // Sun color (Gold)
-					lineWidth={5} // Thicker line
+					color="#FFD700"
+					lineWidth={10}
 					opacity={0.8}
 					transparent
 				/>

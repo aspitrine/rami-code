@@ -45,13 +45,18 @@ export const gameActions = {
 		// Calculate the full path
 		const points: [number, number, number][] = [];
 
-		// Start point (above root)
-		points.push([0, 8, 0]);
+		// Get root position first
+		const rootPos = getNodePosition(0);
+
+		// Start point (high above root for dramatic fall)
+		points.push([rootPos[0], 12, 0]);
+
+		// Point just above root (for falling animation)
+		points.push([rootPos[0], rootPos[1] + 2, 0]);
 
 		let currentIndex = 0;
 
-		// Add root position
-		const rootPos = getNodePosition(0);
+		// Add root position - simple pass through
 		points.push([rootPos[0], rootPos[1] + 0.5, 0]); // Top of root
 		points.push([rootPos[0], rootPos[1] - 0.5, 0]); // Bottom of root
 

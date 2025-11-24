@@ -34,7 +34,7 @@ export function Board({ nodeStates, onToggleNode, hideLabels }: BoardProps) {
 				nodes.push(
 					<Node
 						key={`node-${currentIndex}`}
-						position={[x, y, z]}
+						position={[x, y, z + 0.1]}
 						isOn={nodeStates[currentIndex]}
 						onToggle={() => onToggleNode(currentIndex)}
 					/>,

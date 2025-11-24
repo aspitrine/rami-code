@@ -138,12 +138,10 @@ export function RamiGame() {
 					<OrbitControls
 						enablePan={true}
 						enableZoom={true}
-						enableRotate={true}
+						enableRotate={false}
 					/>
 
-					<ambientLight intensity={0.5} />
-					<pointLight position={[10, 10, 10]} intensity={1} castShadow />
-					<pointLight position={[-10, 10, -10]} intensity={0.5} />
+					<ambientLight intensity={1} />
 
 					<Board
 						nodeStates={nodeStates}
@@ -160,11 +158,11 @@ export function RamiGame() {
 						/>
 					)}
 
-					<gridHelper
+					{/* <gridHelper
 						args={[30, 30, 0x444444, 0x222222]}
 						rotation={[Math.PI / 2, 0, 0]}
 						position={[0, 0, -1]}
-					/>
+					/> */}
 				</Canvas>
 			</div>
 

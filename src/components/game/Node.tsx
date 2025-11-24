@@ -39,7 +39,7 @@ export function Node({ position, isOn, onToggle, label }: NodeProps) {
 				onPointerOver={() => setHover(true)}
 				onPointerOut={() => setHover(false)}
 			>
-				<boxGeometry args={[1.5, 0.4, 0.2]} />
+				<boxGeometry args={[1.5, 0.5, 0.2]} />
 				<meshStandardMaterial
 					color={
 						isOn
@@ -54,10 +54,10 @@ export function Node({ position, isOn, onToggle, label }: NodeProps) {
 			</mesh>
 
 			{/* Pivot point visual */}
-			<mesh position={[0, 0, 0]}>
+			{/* <mesh position={[0, 0, 0]}>
 				<cylinderGeometry args={[0.2, 0.2, 0.3]} />
 				<meshStandardMaterial color="#333" />
-			</mesh>
+			</mesh> */}
 
 			{/* Label */}
 			{label && (
