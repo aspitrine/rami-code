@@ -9,10 +9,22 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as RamiRouteImport } from './routes/rami'
+import { Route as PathfindingRouteImport } from './routes/pathfinding'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as ApiSplatRouteImport } from './routes/api.$'
 import { Route as ApiRpcSplatRouteImport } from './routes/api.rpc.$'
 
+const RamiRoute = RamiRouteImport.update({
+  id: '/rami',
+  path: '/rami',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PathfindingRoute = PathfindingRouteImport.update({
+  id: '/pathfinding',
+  path: '/pathfinding',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
@@ -31,36 +43,58 @@ const ApiRpcSplatRoute = ApiRpcSplatRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/pathfinding': typeof PathfindingRoute
+  '/rami': typeof RamiRoute
   '/api/$': typeof ApiSplatRoute
   '/api/rpc/$': typeof ApiRpcSplatRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/pathfinding': typeof PathfindingRoute
+  '/rami': typeof RamiRoute
   '/api/$': typeof ApiSplatRoute
   '/api/rpc/$': typeof ApiRpcSplatRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/pathfinding': typeof PathfindingRoute
+  '/rami': typeof RamiRoute
   '/api/$': typeof ApiSplatRoute
   '/api/rpc/$': typeof ApiRpcSplatRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/api/$' | '/api/rpc/$'
+  fullPaths: '/' | '/pathfinding' | '/rami' | '/api/$' | '/api/rpc/$'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/api/$' | '/api/rpc/$'
-  id: '__root__' | '/' | '/api/$' | '/api/rpc/$'
+  to: '/' | '/pathfinding' | '/rami' | '/api/$' | '/api/rpc/$'
+  id: '__root__' | '/' | '/pathfinding' | '/rami' | '/api/$' | '/api/rpc/$'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  PathfindingRoute: typeof PathfindingRoute
+  RamiRoute: typeof RamiRoute
   ApiSplatRoute: typeof ApiSplatRoute
   ApiRpcSplatRoute: typeof ApiRpcSplatRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/rami': {
+      id: '/rami'
+      path: '/rami'
+      fullPath: '/rami'
+      preLoaderRoute: typeof RamiRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/pathfinding': {
+      id: '/pathfinding'
+      path: '/pathfinding'
+      fullPath: '/pathfinding'
+      preLoaderRoute: typeof PathfindingRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -87,6 +121,8 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  PathfindingRoute: PathfindingRoute,
+  RamiRoute: RamiRoute,
   ApiSplatRoute: ApiSplatRoute,
   ApiRpcSplatRoute: ApiRpcSplatRoute,
 }
